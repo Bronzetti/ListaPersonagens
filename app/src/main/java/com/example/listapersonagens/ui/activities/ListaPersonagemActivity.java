@@ -25,7 +25,6 @@ public class ListaPersonagemActivity extends AppCompatActivity {
   ListView listaDePersonagens = findViewById(R.id.activity_main_lista_personagem); //pega a lista através do id
 listaDePersonagens.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, personagem));
 
-
        /* TextView primeiroPersonagem = findViewById(R.id.textView); //
         TextView segundoPersonagem = findViewById(R.id.textView2);
         TextView terceiroPersonagem = findViewById(R.id.textView3);
