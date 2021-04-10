@@ -16,7 +16,7 @@
         android:layout_marginBottom="30dp"
         android:clickable="true"
         android:focusable="true"
-        android:src="@drawable/ic_add"/>
+        android:src="@drawable/ic_add" />
 
     <ListView
         android:id="@+id/activity_main_lista_personagem"
