@@ -17,6 +17,9 @@ public class Personagem implements Serializable { //classe personagem criada par
         this.altura = altura;
         this.nascimento = nascimento;
     }
+    public Personagem(){
+
+    }
 
     public String getNome() {
         return nome;

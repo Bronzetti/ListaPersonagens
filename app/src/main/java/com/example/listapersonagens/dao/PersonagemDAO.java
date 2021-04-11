@@ -2,7 +2,6 @@ package com.example.listapersonagens.dao;
 
 import com.example.listapersonagens.model.Personagem;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
