@@ -21,13 +21,17 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class ListaPersonagemActivity extends AppCompatActivity {
-    //criação da classe Main
+public class ListaPersonagemActivity extends AppCompatActivity {  //criação da classe Main
+   private final PersonagemDAO dao = new PersonagemDAO();
 @Override
   protected void onCreate(Bundle savedInstancesState){
   super.onCreate(savedInstancesState);
   setContentView(R.layout.activity_lista_personagem);
   setTitle("Lista de Personagens"); //título ao entrar na lista de personagens
+
+  dao.salvar(new Personagem("Luffy","1,70","05/05/1997"));
+  dao.salvar(new Personagem("Ace","1,85","01/01/1997"));
+
 
 
 
@@ -55,20 +59,21 @@ public class ListaPersonagemActivity extends AppCompatActivity {
   @Override
   protected void onResume() {
     super.onResume();
-
-    PersonagemDAO dao = new PersonagemDAO();
-
+    
     ListView listaDePersonagens = findViewById(R.id.activity_main_lista_personagem); //pega a lista através do id
     List<Personagem> personagens = dao.todos();
     listaDePersonagens.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, personagens));
 
     listaDePersonagens.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+      //seleciona personagem
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int posicao, long id) { //superclasse onItemClick
         Personagem personagemEscolhido = personagens.get(posicao);
         //Log.i("personagem", "" + personagemEscolhido);
+
         //intent para abrir meu formulário
         Intent vaiParaFormulario = new Intent(ListaPersonagemActivity.this, FormularioPersonagemActivity.class);
+        vaiParaFormulario.putExtra("personagem", personagemEscolhido);//grava o nome ao clicar nele
         startActivity(vaiParaFormulario);
       }
     });
