@@ -1,5 +1,7 @@
 package com.example.listapersonagens.model;
 
+import androidx.annotation.NonNull;
+
 public class Personagem { //classe personagem criada para persistência dos dados
     private final String nome;
     private final String altura;
@@ -24,4 +26,12 @@ public class Personagem { //classe personagem criada para persistência dos dado
     public String getNascimento() {
         return nascimento;
     }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return nome;
+    }
 }
+
+
