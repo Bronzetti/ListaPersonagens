@@ -12,68 +12,82 @@ import com.example.listapersonagens.R;
 import com.example.listapersonagens.dao.PersonagemDAO;
 import com.example.listapersonagens.model.Personagem;
 
+import static com.example.listapersonagens.ui.activities.ContantesActivities.CHAVE_PERSONAGEM;
+
 public class FormularioPersonagemActivity extends AppCompatActivity {
 
+    public static final String TITULO_APP_BAR_EDITAR_PERSONAGEM = "Editar Personagem";
+    public static final String TITULO_APP_BAR_NOVO_PERSONAGEM = "Novo Personagem";
     private EditText campoNome;
     private EditText campoAltura;
     private EditText campoNascimento;
     private final PersonagemDAO dao = new PersonagemDAO();
-    private Personagem Personagem;
+    private Personagem personagem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario_personagem);
-        setTitle("Formulário de Personagens"); //título ao ir para o formulário
         inicializacaoCampos();//refatoração
-        configuraBotaoAddPersonagem();//refatoração
+        configuraBotaoSalvar();//refatoração
+        carregaPersonagem();//refatoração
+    }
 
+    private void configuraBotaoSalvar() {//botão para adicionar o personagem na lista
+        Button botaoSalvar = findViewById(R.id.button_salvar);
+        botaoSalvar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finalizarFormulario();
+            }
+        });
+    }
+
+    private void finalizarFormulario() {
+        preencherPersonagem();
+        if (personagem.IdValido()) {
+            dao.editar(personagem);
+            finish();
+        } else {
+            dao.salvar(personagem);
+        }
+        finish();
+    }
+
+    private void carregaPersonagem() {
         Intent dados = getIntent();
-        if(dados.hasExtra("personagem")){
-        Personagem personagem = (Personagem) dados.getSerializableExtra("personagem");
-        campoNome.setText(personagem.getNome());
-        campoAltura.setText(personagem.getAltura());
-        campoNascimento.setText(personagem.getNascimento());
-         }else{
-             Personagem = new Personagem();
-             
+        if (dados.hasExtra(CHAVE_PERSONAGEM)) {
+            setTitle(TITULO_APP_BAR_EDITAR_PERSONAGEM); //título ao ir para o formulário
+            personagem = (Personagem) dados.getSerializableExtra(CHAVE_PERSONAGEM);
+            preencheCampos();
+        } else {
+            setTitle(TITULO_APP_BAR_NOVO_PERSONAGEM);
+            personagem = new Personagem();
+
         }
     }
 
-    private void configuraBotaoAddPersonagem() {
-        //botão para adicionar o personagem na lista
-        Button botaoSalvar = findViewById(R.id.button_salvar);
-        botaoSalvar.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                //ao clicar no botão, guardará as informações nas variáveis, dentro do meu onClick em cada um dos campos
-                String nome = campoNome.getText().toString(); //pega a variável nome e com o getText, pegará a informação passada dentro desse campo
-                String altura = campoAltura.getText().toString();
-                String nascimento = campoNascimento.getText().toString();
-
-                //criação de um construtor para armazenar as variáveis locais de forma mais segura
-                //chama o método com os atributos
-                Personagem personagemSalvo = new Personagem(nome, altura, nascimento);
-
-                dao.salvar(personagemSalvo);
-                finish(); //não fica voltando na informação, matando o ciclo de activity e parando na lista
-
-                //modifiCcando as informações, deixa as informações serem editáveis
-                personagemSalvo.setNome(nome);
-                personagemSalvo.setAltura(altura);
-                personagemSalvo.setNascimento(nascimento);
-                dao.editar(personagemSalvo);
-
-            }
-        });
+    private void preencheCampos() {
+        campoNome.setText(personagem.getNome());
+        campoAltura.setText(personagem.getAltura());
+        campoNascimento.setText(personagem.getNascimento());
     }
 
     private void inicializacaoCampos() {
         //vincula as informações das variáveis no meu formulário com os objetos dentro do xml
         campoNome = findViewById(R.id.edittext_nome);
-        campoAltura= findViewById(R.id.edittext_altura);
+        campoAltura = findViewById(R.id.edittext_altura);
         campoNascimento = findViewById(R.id.edittext_nascimento);
+    }
+
+    private void preencherPersonagem() {
+        String nome = campoNome.getText().toString(); //pega a variável nome e com o getText, pegará a informação passada dentro desse campo
+        String altura = campoAltura.getText().toString();
+        String nascimento = campoNascimento.getText().toString();
+
+        personagem.setNome(nome);
+        personagem.setAltura(altura);
+        personagem.setNascimento(nascimento);
     }
 
 

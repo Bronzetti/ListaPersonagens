@@ -6,9 +6,9 @@ import java.io.Serializable;
 
 public class Personagem implements Serializable { //classe personagem criada para persistência dos dados
     //criação das variáveis para cada personagem
-    private  String nome;
-    private  String altura;
-    private  String nascimento;
+    private String nome;
+    private String altura;
+    private String nascimento;
     private int id = 0;
 
     public Personagem(String nome, String altura, String nascimento) {
@@ -17,8 +17,15 @@ public class Personagem implements Serializable { //classe personagem criada par
         this.altura = altura;
         this.nascimento = nascimento;
     }
-    public Personagem(){
 
+    public Personagem() {
+
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return nome;
     }
 
     public String getNome() {
@@ -44,34 +51,19 @@ public class Personagem implements Serializable { //classe personagem criada par
     public void setNascimento(String nascimento) {
         this.nascimento = nascimento;
     }
-    //getters
 
-   /* public String getNome() {
-        return nome;
-    }
-
-    public String getAltura() {
-        return altura;
-    }
-
-    public String getNascimento() {
-        return nascimento;
-    }*/
-
- //mostrando o nome atribuído ao ir para a lista
-    @NonNull
-    @Override
-    public String toString() {
-        return nome;
-    }
-
-    public void setId(int id){
+    public void setId(int id) {
         this.id = id;
     }
 
-    public int getId(){
+    public int getId() {
         return id;
 
+    }
+
+
+    public boolean IdValido() {
+        return id>0;
     }
 }
 

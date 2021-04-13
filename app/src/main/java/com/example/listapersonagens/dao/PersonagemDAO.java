@@ -7,34 +7,38 @@ import java.util.List;
 
 public class PersonagemDAO {
     private final static List<Personagem> personagens = new ArrayList<>();
-    private static int contadorDeId = 1;
+    private static int contadorDeId = 1;//Contador
 
     public void salvar(Personagem personagemSalvo) {
         personagemSalvo.setId(contadorDeId);
         personagens.add(personagemSalvo);
-        contadorDeId++;
-
+        atualizaId();
     }
 
-    public void editar (Personagem personagem){
-        Personagem personagemEscolhido = null;
-        for (Personagem p:
-             personagens) {
-            if (p.getId() ==personagem.getId()){
-                personagemEscolhido = p;
+    private void atualizaId() {
+        contadorDeId++;
+    }
 
-            }
-        }
-        if(personagemEscolhido != null) {
+    public void editar(Personagem personagem) {
+        Personagem personagemEscolhido = buscaPersonagemId(personagem);
+        if (personagemEscolhido != null) {
             int posicaoDoPersonagem = personagens.indexOf(personagemEscolhido);
             personagens.set(posicaoDoPersonagem, personagem);
-
         }
-  
-
     }
-    public List<Personagem> todos(){
 
-      return new ArrayList<>(personagens);
+    private Personagem buscaPersonagemId(Personagem personagem) {
+        for (Personagem p :
+                personagens) {
+            if (p.getId() == personagem.getId()) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public List<Personagem> todos() {
+
+        return new ArrayList<>(personagens);
     }
 }
