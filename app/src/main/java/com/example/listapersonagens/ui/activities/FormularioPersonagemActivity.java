@@ -82,12 +82,12 @@ public class FormularioPersonagemActivity extends AppCompatActivity {
 
     private void preencherPersonagem() {
         String nome = campoNome.getText().toString(); //pega a variável nome e com o getText, pegará a informação passada dentro desse campo
-        String altura = campoAltura.getText().toString();
         String nascimento = campoNascimento.getText().toString();
+        String altura = campoAltura.getText().toString();
 
-        personagem.setNome(nome);
-        personagem.setAltura(altura);
-        personagem.setNascimento(nascimento);
+        personagem.setNome(personagem.getNome());
+        personagem.setAltura(personagem.getAltura());
+        personagem.setNascimento(personagem.getNascimento());
     }
 
 
