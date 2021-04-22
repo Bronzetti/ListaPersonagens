@@ -5,11 +5,14 @@ package com.example.listapersonagens.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.listapersonagens.R;
@@ -26,6 +29,7 @@ public class ListaPersonagemActivity extends AppCompatActivity {
 
   public static final String TITULO_APPBAR = "Lista de Personagens";  //criação da classe Main
   private final PersonagemDAO dao = new PersonagemDAO();
+  private ArrayAdapter<Personagem> adapter; //conjunto de comandos
 
   @Override
   protected void onCreate(Bundle savedInstancesState) {
@@ -33,12 +37,13 @@ public class ListaPersonagemActivity extends AppCompatActivity {
     setContentView(R.layout.activity_lista_personagem);
     setTitle(TITULO_APPBAR); //título ao entrar na lista de personagens
     configuraFabNovoPersonagem();
+    configuraLista();
 
   }
 
   private void configuraFabNovoPersonagem() {
-    FloatingActionButton botaoNovoPersonagem = findViewById(R.id.fab_add);//botão que leva da lista para o formulário
-    botaoNovoPersonagem.setOnClickListener(new View.OnClickListener() {//chamar ação do botão
+    FloatingActionButton botaoNovoPersonagem = findViewById(R.id.fab_add); //botão que leva da lista para o formulário
+    botaoNovoPersonagem.setOnClickListener(new View.OnClickListener() { //chamar ação do botão
       @Override
       public void onClick(View v) { //toda vez que apertar o fab irá direto para o formulário
         abreFormulario();
@@ -53,12 +58,31 @@ public class ListaPersonagemActivity extends AppCompatActivity {
   @Override
   protected void onResume() {
     super.onResume();
+    adapter.clear();
+    adapter.addAll(dao.todos());
+  }
 
-    ListView listaDePersonagens = findViewById(R.id.activity_main_lista_personagem); //pega a lista através do id
-    final List<Personagem> personagens = dao.todos();
-    listaDePersonagens(listaDePersonagens, personagens);
+  @Override
+  public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+    super.onCreateContextMenu(menu, v, menuInfo);
+    menu.add("Remover");
+  }
 
-    configuraItemPorClique(listaDePersonagens);
+  @Override
+  public boolean onContextItemSelected(@NonNull MenuItem item) {
+    AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+    Personagem personagemEscolhido = adapter.getItem(menuInfo.position);
+    adapter.remove(personagemEscolhido);
+    return super.onContextItemSelected(item);
+  }
+
+  private void configuraLista() {
+    ListView listaDePersonagens = findViewById(R.id.activity_main_lista_personagem); //pega a lista através do id e identificação no xml
+    //final List<Personagem> personagens = dao.todos();
+    //listaDePersonagens(listaDePersonagens,personagens); //lista de personagens passada
+    listaDePersonagens(listaDePersonagens); //configuração da lista com listagem necessária
+    configuraItemPorClique(listaDePersonagens); //configuração item por clique
+    registerForContextMenu(listaDePersonagens);
   }
 
   private void configuraItemPorClique(ListView listaDePersonagens) {
@@ -77,7 +101,8 @@ public class ListaPersonagemActivity extends AppCompatActivity {
     startActivity(vaiParaoFormulario);
   }
 
-  private void listaDePersonagens(ListView listaDePersonagens, List<Personagem> personagens) {
-    listaDePersonagens.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, personagens));
+  private void listaDePersonagens(ListView listaDePersonagens) {
+    adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+    listaDePersonagens.setAdapter(adapter);
   }
 }

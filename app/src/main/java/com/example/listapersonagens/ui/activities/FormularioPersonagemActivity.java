@@ -32,6 +32,24 @@ public class FormularioPersonagemActivity extends AppCompatActivity {
         configuraBotaoSalvar();//refatoração
         carregaPersonagem();//refatoração
     }
+    private void carregaPersonagem() {
+        Intent dados = getIntent();
+        if (dados.hasExtra(CHAVE_PERSONAGEM)) {
+            setTitle(TITULO_APP_BAR_EDITAR_PERSONAGEM); //título ao ir para o formulário
+            personagem = (Personagem) dados.getSerializableExtra(CHAVE_PERSONAGEM);
+            preencheCampos();
+        } else {
+            setTitle(TITULO_APP_BAR_NOVO_PERSONAGEM);
+            personagem = new Personagem();
+
+        }
+    }
+
+    private void preencheCampos() {
+        campoNome.setText(personagem.getNome());
+        campoAltura.setText(personagem.getAltura());
+        campoNascimento.setText(personagem.getNascimento());
+    }
 
     private void configuraBotaoSalvar() {//botão para adicionar o personagem na lista
         Button botaoSalvar = findViewById(R.id.button_salvar);
@@ -54,25 +72,6 @@ public class FormularioPersonagemActivity extends AppCompatActivity {
         finish();
     }
 
-    private void carregaPersonagem() {
-        Intent dados = getIntent();
-        if (dados.hasExtra(CHAVE_PERSONAGEM)) {
-            setTitle(TITULO_APP_BAR_EDITAR_PERSONAGEM); //título ao ir para o formulário
-            personagem = (Personagem) dados.getSerializableExtra(CHAVE_PERSONAGEM);
-            preencheCampos();
-        } else {
-            setTitle(TITULO_APP_BAR_NOVO_PERSONAGEM);
-            personagem = new Personagem();
-
-        }
-    }
-
-    private void preencheCampos() {
-        campoNome.setText(personagem.getNome());
-        campoAltura.setText(personagem.getAltura());
-        campoNascimento.setText(personagem.getNascimento());
-    }
-
     private void inicializacaoCampos() {
         //vincula as informações das variáveis no meu formulário com os objetos dentro do xml
         campoNome = findViewById(R.id.edittext_nome);
@@ -85,9 +84,9 @@ public class FormularioPersonagemActivity extends AppCompatActivity {
         String nascimento = campoNascimento.getText().toString();
         String altura = campoAltura.getText().toString();
 
-        personagem.setNome(personagem.getNome());
-        personagem.setAltura(personagem.getAltura());
-        personagem.setNascimento(personagem.getNascimento());
+        personagem.setNome(nome);
+        personagem.setAltura(altura);
+        personagem.setNascimento(nascimento);
     }
 
 
