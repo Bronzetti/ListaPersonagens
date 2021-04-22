@@ -67,11 +67,10 @@ public class ListaPersonagemActivity extends AppCompatActivity {
     adapter.addAll(dao.todos());
   }
 
-  /*private void remove(Personagem personagem){
+  private void remove(Personagem personagem){
     dao.remove(personagem);
     adapter.remove(personagem);
    }
-   */
 
   @Override
   public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -97,7 +96,7 @@ public class ListaPersonagemActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                   AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                   Personagem personagemEscolhido = adapter.getItem(menuInfo.position);
-                  adapter.remove(personagemEscolhido);
+                  remove(personagemEscolhido);
                 }
               })
               .setNegativeButton("Não", null)
