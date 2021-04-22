@@ -3,6 +3,8 @@
 
 package com.example.listapersonagens.ui.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -38,7 +40,6 @@ public class ListaPersonagemActivity extends AppCompatActivity {
     setTitle(TITULO_APPBAR); //título ao entrar na lista de personagens
     configuraFabNovoPersonagem();
     configuraLista();
-
   }
 
   private void configuraFabNovoPersonagem() {
@@ -58,22 +59,50 @@ public class ListaPersonagemActivity extends AppCompatActivity {
   @Override
   protected void onResume() {
     super.onResume();
+    atualizaPersonagem();
+  }
+
+  private void atualizaPersonagem() {
     adapter.clear();
     adapter.addAll(dao.todos());
   }
 
+  /*private void remove(Personagem personagem){
+    dao.remove(personagem);
+    adapter.remove(personagem);
+   }
+   */
+
   @Override
   public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
     super.onCreateContextMenu(menu, v, menuInfo);
-    menu.add("Remover");
+    //menu.add("Remover");
+    getMenuInflater().inflate(R.menu.activity_lista_personagens_menu, menu);
   }
 
   @Override
   public boolean onContextItemSelected(@NonNull MenuItem item) {
-    AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-    Personagem personagemEscolhido = adapter.getItem(menuInfo.position);
-    adapter.remove(personagemEscolhido);
+    configuraMenu(item);
     return super.onContextItemSelected(item);
+  }
+
+  private void configuraMenu(@NonNull MenuItem item) {
+    int itemId = item.getItemId();
+    if(itemId == R.id.activity_lista_personagem_menu_remover) {
+      new AlertDialog.Builder(this)
+              .setTitle("Removendo personagem")
+              .setMessage("Tem certeza que deseja remover?")
+              .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                  AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+                  Personagem personagemEscolhido = adapter.getItem(menuInfo.position);
+                  adapter.remove(personagemEscolhido);
+                }
+              })
+              .setNegativeButton("Não", null)
+              .show();
+    }
   }
 
   private void configuraLista() {
